@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Hospital Management System - departments, doctors, patients, appointments and medical records.">
+  <title>Hospital Management System</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Reusable inline SVG icons. No icon library is needed. -->
+  <svg class="icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="icon-dashboard" viewBox="0 0 24 24">
+      <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+      <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+      <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+      <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+    </symbol>
+    <symbol id="icon-department" viewBox="0 0 24 24">
+      <rect x="4" y="3" width="16" height="18" rx="1.5"></rect>
+      <path d="M9 21v-4h6v4"></path>
+      <path d="M8 7h.01M12 7h.01M16 7h.01M8 11h.01M12 11h.01M16 11h.01"></path>
+    </symbol>
+    <symbol id="icon-doctor" viewBox="0 0 24 24">
+      <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8z"></path>
+      <path d="M7.5 12h3l1.5-3 2 6 1.5-3h3"></path>
+    </symbol>
+    <symbol id="icon-patient" viewBox="0 0 24 24">
+      <circle cx="9" cy="7" r="4"></circle>
+      <path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"></path>
+      <path d="M19 8v6M16 11h6"></path>
+    </symbol>
+    <symbol id="icon-appointment" viewBox="0 0 24 24">
+      <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+      <path d="M16 3v4M8 3v4M3 10h18"></path>
+      <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"></path>
+    </symbol>
+    <symbol id="icon-record" viewBox="0 0 24 24">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+      <path d="M14 2v6h6M8 13h8M8 17h6"></path>
+    </symbol>
+    <symbol id="icon-menu" viewBox="0 0 24 24">
+      <path d="M4 6h16M4 12h16M4 18h16"></path>
+    </symbol>
+    <symbol id="icon-close" viewBox="0 0 24 24">
+      <path d="M18 6 6 18M6 6l12 12"></path>
+    </symbol>
+    <symbol id="icon-plus" viewBox="0 0 24 24">
+      <path d="M12 5v14M5 12h14"></path>
+    </symbol>
+    <symbol id="icon-pulse" viewBox="0 0 24 24">
+      <path d="M3 12h4l2-7 4 14 2-7h6"></path>
+    </symbol>
+  </svg>
+
+  <div class="app-shell" id="app-shell">
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <span></span><span></span>
+        </div>
+        <div>
+          <strong>HMS</strong>
+          <small>Hospital Management</small>
+        </div>
+      </div>
+
+      <nav class="main-nav" aria-label="Main navigation">
+        <span class="nav-label">Overview</span>
+        <a href="#dashboard" class="nav-link" data-view="dashboard">
+          <svg class="icon"><use href="#icon-dashboard"></use></svg>
+          <span>Dashboard</span>
+        </a>
+
+        <span class="nav-label">Hospital</span>
+        <a href="#departments" class="nav-link" data-view="departments">
+          <svg class="icon"><use href="#icon-department"></use></svg>
+          <span>Departments</span>
+        </a>
+        <a href="#doctors" class="nav-link" data-view="doctors">
+          <svg class="icon"><use href="#icon-doctor"></use></svg>
+          <span>Doctors</span>
+        </a>
+        <a href="#patients" class="nav-link" data-view="patients">
+          <svg class="icon"><use href="#icon-patient"></use></svg>
+          <span>Patients</span>
+        </a>
+
+        <span class="nav-label">Clinical</span>
+        <a href="#appointments" class="nav-link" data-view="appointments">
+          <svg class="icon"><use href="#icon-appointment"></use></svg>
+          <span>Appointments</span>
+        </a>
+        <a href="#records" class="nav-link" data-view="records">
+          <svg class="icon"><use href="#icon-record"></use></svg>
+          <span>Medical Records</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-icon">
+          <svg class="icon"><use href="#icon-pulse"></use></svg>
+        </div>
+        <div>
+          <strong>DBMS Mini Project</strong>
+          <small>MySQL + Node.js + Express</small>
+        </div>
+      </div>
+    </aside>
+
+    <div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="main-content">
+      <header class="topbar">
+        <button class="icon-button menu-button" id="menu-toggle" type="button"
+                aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false">
+          <svg class="icon"><use href="#icon-menu"></use></svg>
+        </button>
+
+        <div class="topbar-heading">
+          <h1 id="page-title">Dashboard</h1>
+          <p id="page-subtitle">Overview of hospital activity</p>
+        </div>
+
+        <div class="topbar-date" id="current-date" aria-label="Current date"></div>
+      </header>
+
+      <div class="page-content">
+        <!-- ================= DASHBOARD ================= -->
+        <section id="view-dashboard" class="view" aria-labelledby="dashboard-heading">
+          <div class="hero-card">
+            <div class="hero-content">
+              <span class="eyebrow">Hospital overview</span>
+              <h2 id="dashboard-heading">Everything your hospital needs, in one place.</h2>
+              <p>
+                Manage departments, doctors, patients, appointments and clinical
+                records from a single, connected system.
+              </p>
+              <button class="btn btn-light" type="button" id="quick-appointment-btn">
+                <svg class="icon"><use href="#icon-plus"></use></svg>
+                Book an appointment
+              </button>
+            </div>
+            <div class="hero-mark" aria-hidden="true">
+              <div class="hero-pulse-line"></div>
+              <svg class="icon"><use href="#icon-pulse"></use></svg>
+            </div>
+          </div>
+
+          <div class="stats-grid" id="dashboard-stats">
+            <div class="stat-card skeleton"></div>
+            <div class="stat-card skeleton"></div>
+            <div class="stat-card skeleton"></div>
+            <div class="stat-card skeleton"></div>
+          </div>
+
+          <div class="dashboard-grid">
+            <section class="panel" aria-labelledby="today-heading">
+              <div class="panel-header">
+                <div>
+                  <h3 id="today-heading">Today's schedule</h3>
+                  <p>Appointments booked for today</p>
+                </div>
+                <a href="#appointments" class="text-link">View all</a>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Patient</th>
+                      <th>Doctor</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dashboard-today-body">
+                    <tr><td colspan="4" class="loading-cell">Loading appointments...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="panel" aria-labelledby="recent-records-heading">
+              <div class="panel-header">
+                <div>
+                  <h3 id="recent-records-heading">Recent medical records</h3>
+                  <p>Latest diagnoses recorded</p>
+                </div>
+                <a href="#records" class="text-link">View all</a>
+              </div>
+              <div class="record-list" id="dashboard-records">
+                <div class="loading-block">Loading records...</div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <!-- ================= DEPARTMENTS ================= -->
+        <section id="view-departments" class="view hidden" aria-labelledby="departments-heading">
+          <div class="page-toolbar">
+            <div>
+              <h2 id="departments-heading" class="sr-only">Departments</h2>
+              <p class="page-description">
+                Manage hospital wings, their locations and contact numbers.
+              </p>
+            </div>
+            <button class="btn btn-primary" type="button" id="add-department-btn">
+              <svg class="icon"><use href="#icon-plus"></use></svg>
+              Add department
+            </button>
+          </div>
+
+          <section class="table-card" aria-label="Department records">
+            <div class="table-card-header">
+              <h3>All departments</h3>
+              <span class="count-pill" id="departments-count">0 records</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Department</th>
+                    <th>Location</th>
+                    <th>Phone</th>
+                    <th>Doctors</th>
+                    <th class="actions-column">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="departments-body">
+                  <tr><td colspan="6" class="loading-cell">Loading departments...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <!-- ================= DOCTORS ================= -->
+        <section id="view-doctors" class="view hidden" aria-labelledby="doctors-heading">
+          <div class="page-toolbar">
+            <div>
+              <h2 id="doctors-heading" class="sr-only">Doctors</h2>
+              <p class="page-description">
+                Maintain doctor profiles and their department assignments.
+              </p>
+            </div>
+            <button class="btn btn-primary" type="button" id="add-doctor-btn">
+              <svg class="icon"><use href="#icon-plus"></use></svg>
+              Add doctor
+            </button>
+          </div>
+
+          <section class="table-card" aria-label="Doctor records">
+            <div class="table-card-header">
+              <h3>All doctors</h3>
+              <span class="count-pill" id="doctors-count">0 records</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Doctor</th>
+                    <th>Specialization</th>
+                    <th>Department</th>
+                    <th>Fee</th>
+                    <th>Contact</th>
+                    <th class="actions-column">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="doctors-body">
+                  <tr><td colspan="7" class="loading-cell">Loading doctors...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <!-- ================= PATIENTS ================= -->
+        <section id="view-patients" class="view hidden" aria-labelledby="patients-heading">
+          <div class="page-toolbar">
+            <div>
+              <h2 id="patients-heading" class="sr-only">Patients</h2>
+              <p class="page-description">
+                Register patients and keep their demographic details up to date.
+              </p>
+            </div>
+            <button class="btn btn-primary" type="button" id="add-patient-btn">
+              <svg class="icon"><use href="#icon-plus"></use></svg>
+              Add patient
+            </button>
+          </div>
+
+          <section class="table-card" aria-label="Patient records">
+            <div class="table-card-header">
+              <h3>All patients</h3>
+              <span class="count-pill" id="patients-count">0 records</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Patient</th>
+                    <th>Date of birth</th>
+                    <th>Gender</th>
+                    <th>Blood group</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th class="actions-column">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="patients-body">
+                  <tr><td colspan="9" class="loading-cell">Loading patients...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <!-- ================= APPOINTMENTS ================= -->
+        <section id="view-appointments" class="view hidden" aria-labelledby="appointments-heading">
+          <div class="page-toolbar">
+            <div>
+              <h2 id="appointments-heading" class="sr-only">Appointments</h2>
+              <p class="page-description">
+                Schedule visits, update their status, or remove cancelled bookings.
+              </p>
+            </div>
+            <button class="btn btn-primary" type="button" id="add-appointment-btn">
+              <svg class="icon"><use href="#icon-plus"></use></svg>
+              New appointment
+            </button>
+          </div>
+
+          <section class="table-card" aria-label="Appointment records">
+            <div class="table-card-header">
+              <h3>All appointments</h3>
+              <span class="count-pill" id="appointments-count">0 records</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Date &amp; time</th>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Status</th>
+                    <th>Reason</th>
+                    <th class="actions-column">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="appointments-body">
+                  <tr><td colspan="7" class="loading-cell">Loading appointments...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+
+        <!-- ================= MEDICAL RECORDS ================= -->
+        <section id="view-records" class="view hidden" aria-labelledby="records-heading">
+          <div class="page-toolbar">
+            <div>
+              <h2 id="records-heading" class="sr-only">Medical Records</h2>
+              <p class="page-description">
+                Archive diagnoses, prescriptions and clinical notes after a completed visit.
+              </p>
+            </div>
+            <button class="btn btn-primary" type="button" id="add-record-btn">
+              <svg class="icon"><use href="#icon-plus"></use></svg>
+              Add medical record
+            </button>
+          </div>
+
+          <section class="table-card" aria-label="Medical record entries">
+            <div class="table-card-header">
+              <h3>All medical records</h3>
+              <span class="count-pill" id="records-count">0 records</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Patient</th>
+                    <th>Doctor</th>
+                    <th>Appointment</th>
+                    <th>Diagnosis</th>
+                    <th>Prescription</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody id="records-body">
+                  <tr><td colspan="8" class="loading-cell">Loading medical records...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <!-- ================= MODAL ================= -->
+  <div class="modal-overlay hidden" id="modal-overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h2 id="modal-title">Form</h2>
+        <button type="button" class="icon-button" id="modal-close" aria-label="Close form">
+          <svg class="icon"><use href="#icon-close"></use></svg>
+        </button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ================= TOASTS ================= -->
+  <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="false"></div>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
